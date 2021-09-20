@@ -1,7 +1,9 @@
-﻿using RandomPeopleWebAPI.Models;
+﻿using Microsoft.EntityFrameworkCore;
+using RandomPeopleWebAPI.Models;
 using RandomPeopleWebAPI.Models.ViewModels;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace RandomPeopleWebAPI.Services
 {
@@ -14,40 +16,34 @@ namespace RandomPeopleWebAPI.Services
             _context = context;
         }
 
-        public IEnumerable<PersonViewModel> GetAllPeople()
+        public async Task<List<PersonViewModel>> GetAllPeopleAsync()
         {
-            return _context.People
-                .Join(
-                    _context.Addresses,
-                    person => person.AddressId,
-                    address => address.AddressId,
-                    (person, address) => new PersonViewModel()
-                    {
-                        Id = person.PersonId,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName,
-                        IsActive = person.IsActive,
-                        City = address.City
-                    }
-                ).ToList();
+            return await _context.People.Select(o => new PersonViewModel
+            {
+                Id = o.PersonId,
+                FirstName = o.FirstName,
+                LastName = o.LastName,
+                Street = o.Address.Street,
+                ZipCode = o.Address.ZipCode,
+                City = o.Address.City,
+                IsActive = o.IsActive
+            }).ToListAsync();
         }
 
-        public IEnumerable<PersonViewModel> Search(string searchTerm)
+        public async Task<List<PersonViewModel>> SearchAsync(string searchTerm)
         {
             if (!string.IsNullOrEmpty(searchTerm))
             {
-                return _context.People
-                .Join(
-                    _context.Addresses,
-                    person => person.AddressId,
-                    address => address.AddressId,
-                    (person, address) => new PersonViewModel()
-                    {
-                        Id = person.PersonId,
-                        FirstName = person.FirstName,
-                        LastName = person.LastName
-                    }
-                ).Where(x => x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm)).ToList();
+                return await _context.People.Select(o => new PersonViewModel
+                {
+                    Id = o.PersonId,
+                    FirstName = o.FirstName,
+                    LastName = o.LastName,
+                    Street = o.Address.Street,
+                    ZipCode = o.Address.ZipCode,
+                    City = o.Address.City,
+                    IsActive = o.IsActive
+                }).Where(x => x.FirstName.Contains(searchTerm) || x.LastName.Contains(searchTerm)).ToListAsync();
             }
             else
             {

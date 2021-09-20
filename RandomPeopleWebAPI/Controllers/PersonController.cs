@@ -3,6 +3,7 @@ using RandomPeopleWebAPI.Cache;
 using RandomPeopleWebAPI.Models.ViewModels;
 using RandomPeopleWebAPI.Services;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RandomPeopleWebAPI.Controllers
 {
@@ -19,17 +20,17 @@ namespace RandomPeopleWebAPI.Controllers
 
         [HttpGet]
         [Cached(600)]
-        public IEnumerable<PersonViewModel> Get()
+        public Task<List<PersonViewModel>> Get()
         {
-            return _personAccessor.GetAllPeople();
+            return _personAccessor.GetAllPeopleAsync();
         }
 
         [HttpGet]
         [Route("search")]
         [Cached(600)]
-        public IEnumerable<PersonViewModel> Search([FromQuery] string searchTerm)
+        public Task<List<PersonViewModel>> Search([FromQuery] string searchTerm)
         {
-            return _personAccessor.Search(searchTerm);
+            return _personAccessor.SearchAsync(searchTerm);
         }
     }
 }

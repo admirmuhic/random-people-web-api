@@ -1,11 +1,12 @@
 ﻿using RandomPeopleWebAPI.Models.ViewModels;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace RandomPeopleWebAPI.Services
 {
     public interface IPersonAccessorService
     {
-        IEnumerable<PersonViewModel> GetAllPeople();
-        IEnumerable<PersonViewModel> Search(string searchTerm);
+        Task<List<PersonViewModel>> GetAllPeopleAsync();
+        Task<List<PersonViewModel>> SearchAsync(string searchTerm);
     }
 }
