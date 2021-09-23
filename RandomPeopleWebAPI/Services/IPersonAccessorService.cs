@@ -1,4 +1,5 @@
-﻿using RandomPeopleWebAPI.Models.ViewModels;
+﻿using Microsoft.AspNetCore.Mvc;
+using RandomPeopleWebAPI.Models.ViewModels;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -8,5 +9,6 @@ namespace RandomPeopleWebAPI.Services
     {
         Task<List<PersonViewModel>> GetAllPeopleAsync();
         Task<List<PersonViewModel>> SearchAsync(string searchTerm);
+        void Edit(PersonViewModel person);
     }
 }

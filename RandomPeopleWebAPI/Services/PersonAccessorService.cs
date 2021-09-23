@@ -1,6 +1,8 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RandomPeopleWebAPI.Models;
 using RandomPeopleWebAPI.Models.ViewModels;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -50,5 +52,21 @@ namespace RandomPeopleWebAPI.Services
                 return null;
             }
         }
+
+        public void Edit(PersonViewModel person)
+        {
+            var personToUpdate = _context.People.First(a => a.PersonId == person.Id);
+            personToUpdate.LastName = person.LastName;
+
+            try
+            {
+                _context.SaveChanges();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                throw new DbUpdateConcurrencyException("Update concurrency happend...");
+            }
+        }
+
     }
 }

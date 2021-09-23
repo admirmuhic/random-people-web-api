@@ -32,5 +32,20 @@ namespace RandomPeopleWebAPI.Controllers
         {
             return _personAccessor.SearchAsync(searchTerm);
         }
+
+        [HttpPut]
+        [Route("edit")]
+        public IActionResult Edit([FromBody] PersonViewModel person)
+        {
+            if (person == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                _personAccessor.Edit(person);
+                return Ok();
+            }
+        }
     }
 }
